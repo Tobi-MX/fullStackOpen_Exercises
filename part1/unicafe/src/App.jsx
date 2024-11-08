@@ -9,6 +9,13 @@ const Button = ({onClick, text}) => {
 
 
 const Statistics = ({ good, neutral, bad, total}) => {
+  if (good === 0 & neutral === 0 & bad === 0) {
+    return(
+      <div>
+        No feedback given
+      </div>
+    )
+  }
   return(
     <div>
       good {good}<br/>
@@ -20,6 +27,7 @@ const Statistics = ({ good, neutral, bad, total}) => {
     </div>
   )
 }
+
 
 const App = () => {
   // save clicks of each button to its own state
