@@ -14,6 +14,7 @@ const App = () => {
    
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState({0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0})
+  const [highest, setHighest] = useState(Math.floor(Math.random() * 8))
 
   const randomSelector = () => {
     const nextRandomIndex = Math.floor(Math.random() * 8)
@@ -23,12 +24,19 @@ const App = () => {
   const eachVote = () => {
     const votesCopy = { ...votes }
     votesCopy[selected] += 1
+    const highestVal = Math.max(...Object.values(votesCopy))
 
+    for(let key in votesCopy){
+      if(votesCopy[key] === highestVal && votesCopy[highest] !== highestVal){
+        setHighest(key)
+      }
+    }
     setVotes(votesCopy)
   }
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       {anecdotes[selected]}<br/>
       has {votes[selected]} votes
 
@@ -36,6 +44,9 @@ const App = () => {
         <button onClick ={eachVote}>vote</button>
         <button onClick={randomSelector}> next anecdotes </button>
       </div>
+
+      <h1>Anecdotes with most vote</h1>
+      {anecdotes[highest]}
     </div>
   )
 }
