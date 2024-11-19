@@ -62,22 +62,29 @@ const App = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     const findPerson = persons.find((person) => person.name.toLowerCase() === newName.toLowerCase())
+    const updated = { name: newName, number: newNumber }
 
     if (findPerson === undefined) {
       personService
-      .create({ name: newName, number: newNumber })
+      .create(updated)
       .then(personUpdate => {
         setPersons(persons.concat(personUpdate))
         setShowPersons(persons.concat(personUpdate))
-        setNewNumber('')
-        setNewName('')
-        setFilter('')
       })
-      
     }else {
-      alert(`${newName} is already added to phonebook`)
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        personService
+        .update(findPerson.id, updated)
+        .then(updatedPerson => {
+          const updatedList = persons.map(person => person.id === updatedPerson.id ? updatedPerson : person)
+          setPersons(updatedList)
+          setShowPersons(updatedList)
+        })
+      }
     }
-    
+    setNewNumber('')
+    setNewName('')
+    setFilter('')
   }
 
   const deletePerson = (e) => {
