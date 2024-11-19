@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
 
-const SinglePerson = ({ person }) =>{
+const SinglePerson = ({ person, onClickBtn }) =>{
   return(
-    <div> {person.name} {person.number} </div>
+    <div> {person.name} {person.number} <button onClick={onClickBtn} id={person.id} name={person.name}>delete</button> </div>
   )
 }
 
 
-const Persons = ({ personsDisplay }) => {
+const Persons = ({ personsDisplay, delPerson }) => {
   return(
     <div>
       {personsDisplay.map((person) => {
-        return <SinglePerson key={person.id} person={person} />
+        return <SinglePerson key={person.id} person={person} onClickBtn={delPerson} />
       })}
     </div>
   )
@@ -80,6 +80,18 @@ const App = () => {
     
   }
 
+  const deletePerson = (e) => {
+    if (window.confirm(`Delete ${e.target.name} ?`)) {
+      personService
+      .deleteID(e.target.id)
+      .then(deletedPerson => {
+        const newList = persons.filter(person => person.id !== deletedPerson.id)
+        setPersons(newList)
+        setShowPersons(newList)
+      })
+    }
+  }
+
   const handleNameChange = (e) => {setNewName(e.target.value)}
 
   const handleNumberChange = (e) => {setNewNumber(e.target.value)}
@@ -106,7 +118,7 @@ const App = () => {
       /> 
 
       <h3>Numbers</h3>
-      <Persons personsDisplay={showPersons} />
+      <Persons personsDisplay={showPersons} delPerson={deletePerson} />
     </div>
   )
 }
