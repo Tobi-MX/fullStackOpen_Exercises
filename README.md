@@ -1,2 +1,2 @@
 # fullStackOpen_Exercises
-Submitting exercises from the fullStack course
+Submitting exercises from the full stack open course
