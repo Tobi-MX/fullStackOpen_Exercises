@@ -4,20 +4,20 @@ sequenceDiagram
   participant browser
   participant server
 
-  mark ->> browser: The note ("I am Mark") into HTML form and click save
+  mark ->> browser: Enters "I am Mark" into HTML form and clicks save
+  activate browser
 
-  participant server
-  Note left of browser: The browser starts executing javaScript file then starts a POST req of json data
-  browser ->> server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+  Note left of browser: JavaScript executes:
+  Note left of browser: 1. e.preventDefault()<br/>2. Add note to local `notes` array<br/>3. Update DOM immediately (optimistic update)
+  browser ->> browser: DOM shows "I am Mark" instantly
+
+  browser ->> server: POST /exampleapp/new_note_spa (JSON payload)
   activate server
-  Note right of browser: The server gets the POST req then updates data.json file on the server
-  server -->> browser: Status code: 201 (Created)
+  Note right of server: Server appends note to data.json
+  server -->> browser: HTTP 201 (Created)
   deactivate server
 
-  Note left of browser: The browser continues executing javaScript file...
-  Note left of browser: In the javaScript code, the DOM gets updated with "I am Mark" note
-
-  browser -->> mark: "I am Mark"
-
-  Note left of browser: "I am Mark" is displayed among the notes as the most recent note mark input.
+  browser -->> mark: UI already shows "I am Mark"<br/>before server responded
+  deactivate browser
+  
 ```
