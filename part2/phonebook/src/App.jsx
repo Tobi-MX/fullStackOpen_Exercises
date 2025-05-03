@@ -97,6 +97,15 @@ const App = () => {
           setPersons(updatedList)
           setShowPersons(updatedList)
         })
+        .catch(error => {
+          const newList = persons.filter(person => person.id !== findPerson.id)
+          setPersons(newList)
+          setShowPersons(newList)
+          setNotifyMessage([`Information of ${updated.name} has already been removed from the server`, 'error'])
+          setTimeout(() => {
+            setNotifyMessage([null, ''])
+          }, 3000)
+        })
       }
     }
     setNewNumber('')
