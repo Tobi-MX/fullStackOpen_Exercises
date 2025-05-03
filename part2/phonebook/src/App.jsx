@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
+import './index.css'
 
 const SinglePerson = ({ person, onClickBtn }) =>{
   return(
@@ -42,12 +43,24 @@ const Filter = ({ text, value, onWrite}) => {
 }
 
 
+const Notification = ({ message, classN }) => {
+  if (message === null) {
+    return null
+  }
+
+  return(
+    <div className={classN} >{message}</div>
+  )
+}
+
+
 const App = () => {
   const [persons, setPersons] = useState([])
   const [showPersons, setShowPersons] = useState(persons)
   const [filter, setFilter] = useState('')
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [notifyMessage, setNotifyMessage] = useState([null, ''])
 
   useEffect(() => {
     personService
@@ -70,6 +83,10 @@ const App = () => {
       .then(personUpdate => {
         setPersons(persons.concat(personUpdate))
         setShowPersons(persons.concat(personUpdate))
+        setNotifyMessage([`Added ${personUpdate.name}`, 'success'])
+        setTimeout(() => {
+          setNotifyMessage([null, ''])
+        }, 3000)
       })
     }else {
       if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
@@ -115,6 +132,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notifyMessage[0]} classN={notifyMessage[1]}/>
       <Filter text='filter shown with' value={filter} onWrite={handleFilterChange} />
 
       <h3>Add a new</h3>
