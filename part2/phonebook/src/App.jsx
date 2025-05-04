@@ -60,7 +60,7 @@ const App = () => {
   const [filter, setFilter] = useState('')
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
-  const [notifyMessage, setNotifyMessage] = useState([null, ''])
+  const [notifyMessage, setNotifyMessage] = useState([])
 
   useEffect(() => {
     personService
@@ -85,7 +85,7 @@ const App = () => {
         setShowPersons(persons.concat(personUpdate))
         setNotifyMessage([`Added ${personUpdate.name}`, 'success'])
         setTimeout(() => {
-          setNotifyMessage([null, ''])
+          setNotifyMessage([])
         }, 3000)
       })
     }else {
@@ -103,7 +103,7 @@ const App = () => {
           setShowPersons(newList)
           setNotifyMessage([`Information of ${updated.name} has already been removed from the server`, 'error'])
           setTimeout(() => {
-            setNotifyMessage([null, ''])
+            setNotifyMessage([])
           }, 3000)
         })
       }
@@ -142,6 +142,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Notification message={notifyMessage[0]} classN={notifyMessage[1]}/>
+      
       <Filter text='filter shown with' value={filter} onWrite={handleFilterChange} />
 
       <h3>Add a new</h3>
