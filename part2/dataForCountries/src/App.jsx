@@ -36,8 +36,6 @@ const App = () => {
             </ul>
 
             <img src={countryData.flags.png} alt={countryData.flags.src} />
-            
-            
           </>
         )
       })
@@ -48,7 +46,6 @@ const App = () => {
   const onSearch = (event) => {
     const search = event.target.value
     setSearchVale(search)
-
     const filteredCountry = allCountries.filter(country => 
       country.toLowerCase().includes(search.toLowerCase()) && search !== '')
 
@@ -61,6 +58,11 @@ const App = () => {
     setFilterDisplay(filteredCountry)
   }
 
+  const handleShowClick = (con) => {
+    setFilterDisplay([con])
+    setChosen(con)
+  }
+
   return(
     <div>
       <div> find countries <input value={searchValue} onChange={onSearch} /> </div>
@@ -69,7 +71,8 @@ const App = () => {
       <div>Too many searches, specify another filter</div>
       : filterDisplay.length === 1 ? 
       countryDisplay  
-      :filterDisplay.map(country => <div key={country}>{country}</div>)
+      :filterDisplay.map(country => 
+      <div key={country}>{country} <button onClick={() => handleShowClick(country)}>show</button></div>)
       }
     </div>
     
