@@ -9,6 +9,8 @@ const App = () => {
   const [chosen, setChosen] = useState('')
   const [countryDisplay, setCountryDisplay] = useState(null)
 
+  const api_key = import.meta.env.VITE_SOME_KEY
+
   useEffect(() => {
     axios
     .get(`https://studies.cs.helsinki.fi/restcountries/api/all/`)
@@ -20,22 +22,41 @@ const App = () => {
   
   useEffect(() => {
     if (chosen) {
+      let countryData;
       axios
       .get(`https://studies.cs.helsinki.fi/restcountries/api/name/${chosen}`)
       .then(response => {
-        const countryData = response.data
+        countryData = response.data
+        return axios
+        .get(`https://api.openweathermap.org/data/2.5/weather?q=${countryData.capital}&units=metric&appid=${api_key}`)
+      })
+      .then(weather => {
+        const weatherData = weather.data
+        const capital = countryData.capital.map(cap => cap !== countryData.capital.at(-1) ? `${cap}, ` : cap)
         setCountryDisplay(
           <>
             <h1>{countryData.name.common}</h1>
-            <div>Capital {countryData.capital}</div>
+            <div>Capital {capital}</div>
             <div>Area {countryData.area}</div>
 
             <h2>Languages</h2>
             <ul>
             {Object.values(countryData.languages).map(lan => <li key={lan}>{lan}</li>)}
             </ul>
-
             <img src={countryData.flags.png} alt={countryData.flags.src} />
+
+            <h2>Weather in {capital}</h2>
+            <div>Temperature {weatherData.main.temp} Celsius</div>
+            <img src={`https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`}/>
+            <div>Wind {weatherData.wind.speed} m/s</div>
+
+          </>
+        )
+      })
+      .catch((response) => {
+        setCountryDisplay(
+          <>
+          <h2>This country is not available, Check for another</h2>
           </>
         )
       })
