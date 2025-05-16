@@ -1,5 +1,5 @@
 {
-  "name": "phonebookbackend",
+  "name": "phonebook-backend",
   "version": "1.0.0",
   "description": "",
   "homepage": "https://github.com/Tobi-MX/fullStackOpen_Exercises#readme",
@@ -20,6 +20,7 @@
     "dev": "node --watch index.js"
   },
   "dependencies": {
+    "date-fns": "^4.1.0",
     "express": "^4.21.2"
   }
 }
