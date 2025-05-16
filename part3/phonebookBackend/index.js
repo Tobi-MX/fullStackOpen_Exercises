@@ -2,6 +2,7 @@ const express = require('express')
 const { format } = require('date-fns');
 
 app = express()
+app.use(express.json())
 
 const now = new Date();
 const today = format(now, "EEE")
@@ -34,6 +35,11 @@ let data = [
 const infoText = `<p>Phonebook has info for ${data.length} people</p>
 <p>${today} ${dateTime} GMT+0100 West Africa Time (WAT)</p>`
 
+const generateId = () =>{
+  const id = Math.floor(Math.random() * 100000000)
+  return id
+}
+
 app.get('/api/persons', (request, response) =>{
   response.json(data)
 })
@@ -58,6 +64,19 @@ app.delete('/api/persons/:id', (request, response) => {
   const deletedUpdate = data.filter(person => person.id !== id)
 
   data = deletedUpdate
+  response.json(data)
+})
+
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+
+  const personUpdate = {
+    name: body.name,
+    number: body.number,
+    id: generateId() 
+  }
+
+  data = data.concat(personUpdate)
   response.json(data)
 })
 
