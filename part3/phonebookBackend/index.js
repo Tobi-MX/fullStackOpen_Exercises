@@ -37,7 +37,7 @@ const infoText = `<p>Phonebook has info for ${data.length} people</p>
 
 const generateId = () =>{
   const id = Math.floor(Math.random() * 100000000)
-  return id
+  return String(id)
 }
 
 app.get('/api/persons', (request, response) =>{
@@ -69,6 +69,19 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
+  const name = data.find(person => person.name === body.name)
+
+  if (!body.name || !body.number) {
+    return response.status(400).json({
+      error: "content missing"
+    })
+  }
+
+  if(name) {
+    return response.status(409).json({
+      error: "name must be unique"
+    })
+  }
 
   const personUpdate = {
     name: body.name,
