@@ -4,11 +4,6 @@ const morgan = require('morgan')
 
 app = express()
 
-const now = new Date();
-const today = format(now, "EEE")
-const dateTime = format(now, 'MMM d yyyy HH:mm:ss')
-
-
 let data = [
     { 
       "id": "1",
@@ -34,10 +29,8 @@ let data = [
 
 app.use(express.json())
 
-app.use(morgan('tiny'))
-
-const infoText = `<p>Phonebook has info for ${data.length} people</p>
-<p>${today} ${dateTime} GMT+0100 West Africa Time (WAT)</p>`
+morgan.token('body', function (req, res) { return JSON.stringify(req.body) })
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 const generateId = () =>{
   const id = Math.floor(Math.random() * 100000000)
@@ -49,6 +42,11 @@ app.get('/api/persons', (request, response) =>{
 })
 
 app.get('/info', (request, response) => {
+  let now = new Date();
+  let today = format(now, "EEE")
+  let dateTime = format(now, 'MMM d yyyy HH:mm:ss')
+  let infoText = `<p>Phonebook has info for ${data.length} people</p> 
+  <p>${today} ${dateTime} GMT+0100 West Africa Time (WAT)</p>`
   response.send(infoText)
 })
 
