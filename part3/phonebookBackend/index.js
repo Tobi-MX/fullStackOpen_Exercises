@@ -1,8 +1,8 @@
 const express = require('express')
 const { format } = require('date-fns');
+const morgan = require('morgan')
 
 app = express()
-app.use(express.json())
 
 const now = new Date();
 const today = format(now, "EEE")
@@ -31,6 +31,10 @@ let data = [
       "number": "39-23-6423122"
     }
 ]
+
+app.use(express.json())
+
+app.use(morgan('tiny'))
 
 const infoText = `<p>Phonebook has info for ${data.length} people</p>
 <p>${today} ${dateTime} GMT+0100 West Africa Time (WAT)</p>`
