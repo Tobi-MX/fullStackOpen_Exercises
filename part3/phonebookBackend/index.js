@@ -63,10 +63,11 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.delete('/api/persons/:id', (request, response) => {
   const id = request.params.id
+  const deletedPerson = data.find(person => person.id === id)
   const deletedUpdate = data.filter(person => person.id !== id)
 
   data = deletedUpdate
-  response.json(data)
+  response.json(deletedPerson)
 })
 
 app.post('/api/persons', (request, response) => {
@@ -92,7 +93,7 @@ app.post('/api/persons', (request, response) => {
   }
 
   data = data.concat(personUpdate)
-  response.json(data)
+  response.json(personUpdate)
 })
 
 const PORT = 3002
