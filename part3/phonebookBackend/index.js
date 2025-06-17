@@ -1,8 +1,8 @@
+require('dotenv').config()
 const express = require('express')
 const { format } = require('date-fns');
 const morgan = require('morgan')
-
-app = express()
+const Person =  require('./models/person')
 
 let data = [
     { 
@@ -26,6 +26,7 @@ let data = [
       "number": "39-23-6423122"
     }
 ]
+app = express()
 
 app.use(express.json())
 app.use(express.static('dist'))
@@ -39,7 +40,9 @@ const generateId = () =>{
 }
 
 app.get('/api/persons', (request, response) =>{
-  response.json(data)
+  Person.find({}).then(persons => {
+    response.json(persons)
+  })
 })
 
 app.get('/info', (request, response) => {
@@ -97,7 +100,7 @@ app.post('/api/persons', (request, response) => {
   response.json(personUpdate)
 })
 
-const PORT = process.env.PORT || 3002
+const PORT = process.env.PORT
 app.listen((PORT), () => {
     console.log("This is the start!")
 })
